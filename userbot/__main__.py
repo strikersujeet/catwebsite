@@ -9,6 +9,9 @@
 
 import contextlib
 import sys
+import asyncio
+
+import requests
 
 import userbot
 from userbot import BOTLOG_CHATID, PM_LOGGER_GROUP_ID
@@ -82,10 +85,18 @@ async def externalrepo():
     if "Imported Plugins" in string:
         await catub.tgbot.send_message(BOTLOG_CHATID, string, parse_mode="html")
 
+async def keep_alive():
+    while True:
+        requests.get("https://catwebsiteisgreat.onrender.com")
+        await asyncio.sleep(600)
+
 
 catub.loop.run_until_complete(startup_process())
 
+catub.loop.run_until_complete((keep_alive()))
+
 catub.loop.run_until_complete(externalrepo())
+
 
 if len(sys.argv) in {1, 3, 4}:
     with contextlib.suppress(ConnectionError):
